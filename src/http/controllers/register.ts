@@ -21,7 +21,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   })
 
   if (userWithSamaEmail) {
-    return reply.status(409)
+    console.log('aq')
+    return reply.status(409).send()
   }
 
   await prisma.user.create({
