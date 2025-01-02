@@ -9,7 +9,7 @@ let gymsRepository: InMemoryGymsRepository
 
 let sut: CheckInUseCase
 
-describe('Register Use Case', () => {
+describe('CheckIn Use Case', () => {
   beforeEach(() => {
     checkInsRepository = new InMemoryCheckInsRepository()
     gymsRepository = new InMemoryGymsRepository()
@@ -41,6 +41,28 @@ describe('Register Use Case', () => {
     })
 
     expect(checkIn.id).toEqual(expect.any(String))
+  })
+
+  it('should not be able to check in distant gym', async () => {
+    gymsRepository.items.push({
+      id: 'gym-02',
+      title: 'Javascript gym',
+      description: '',
+      latitude: new Decimal(-18.9431808),
+      longitude: new Decimal(-47.005696),
+      phone: '',
+    })
+
+    vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
+
+    await expect(() =>
+      sut.execute({
+        gymId: 'gym-01',
+        userId: 'user-01',
+        userLatitude: -18.8879678,
+        userLongitude: -46.8666503,
+      }),
+    ).rejects.toBeInstanceOf(Error)
   })
 
   it('should not be able to check in twice in the same day', async () => {
