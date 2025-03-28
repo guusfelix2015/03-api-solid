@@ -10,6 +10,7 @@ let sut: AuthenticateUseCase
 describe('Authenticate Use Case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
+    // @ts-expect-error
     sut = new AuthenticateUseCase(usersRepository)
   })
   it('should be able to authenticate', async () => {
